@@ -94,19 +94,19 @@ public class VectorField : MonoBehaviour
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public int CoordToIndex(float3 pos) {
+    public static int CoordToIndex(float3 pos, float radius, float spacing, int size) {
         float x = math.clamp((pos.x + radius) / spacing, 0, size - 1);
         float y = math.clamp((pos.y + radius) / spacing, 0, size - 1);
         return (int)math.round(x) + (int)math.round(y) * size;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public float3 CoordToVec(float3 pos) {
-        return vectors[CoordToIndex(pos)];
+    public static float3 CoordToVec(float3 pos, float radius, float spacing, int size, NativeArray<float3> vectors) {
+        return vectors[CoordToIndex(pos, radius, spacing, size)];
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public float3 IndexToCoord(int index) {
+    public static float3 IndexToCoord(int index, float radius, float spacing, int size) {
         return new float3(
             -radius + (int)(index % size) * spacing,
             -radius + (int)(index / size) * spacing,
@@ -114,7 +114,7 @@ public class VectorField : MonoBehaviour
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public float3 IndexToVec(int index) {
+    public static float3 IndexToVec(int index, NativeArray<float3> vectors) {
         return vectors[index];
     }
 }
