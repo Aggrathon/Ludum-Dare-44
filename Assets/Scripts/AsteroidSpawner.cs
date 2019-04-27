@@ -54,4 +54,8 @@ public class AsteroidSpawner : MonoBehaviour
             }
         }
     }
+
+    private void Start() {
+        enabled = false;
+    }
 }
