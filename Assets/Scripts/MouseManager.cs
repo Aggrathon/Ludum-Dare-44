@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Unity.Mathematics.math;
 using Unity.Mathematics;
+using Unity.Entities;
+using Unity.Transforms;
 
 [RequireComponent(typeof(Renderer))]
 public class MouseManager : MonoBehaviour
@@ -13,15 +15,18 @@ public class MouseManager : MonoBehaviour
 
     Renderer rend;
     Camera camera;
-    int oldIndex;
-    int tiles;
+    EntityManager mgr;
+    Entity ent;
+    GravityWell gw;
 
     void Start()
     {
         rend = GetComponent<Renderer>();
         camera = Camera.main;
-        oldIndex = -1;
-        tiles = (int)(range / vectorField.spacing);
+        mgr = World.Active.EntityManager;
+        ent = mgr.CreateEntity(typeof(Translation), typeof(GravityWell));
+        gw = new GravityWell(range, vectorField.spacing, false, strength);
+        mgr.SetComponentData(ent, gw);
     }
 
     void Update()
@@ -31,43 +36,20 @@ public class MouseManager : MonoBehaviour
         if (Input.GetMouseButton(0)) {
             pos = camera.ScreenToWorldPoint(Input.mousePosition);
             newIndex = vectorField.CoordToIndex(pos);
-        }
-        if (oldIndex == newIndex)
-            return;
-        else {
             pos.z = 1f;
             transform.position = pos;
-            rend.enabled = newIndex > -1;
-        }
-        if (oldIndex > -1) {
-            for (int i = max(0, oldIndex-tiles); i < min(vectorField.vectors.Length, oldIndex+tiles+1); i++)
-            {
-                for (int j = -tiles; j < tiles + 1; j++)
-                {
-                    var index = i + j * vectorField.size;
-                    if (index >= vectorField.vectors.Length)
-                        break;
-                    else if (index >= 0)
-                        vectorField.vectors[index] = vectorField.reset[index];
-                }
+            mgr.SetComponentData(ent, new Translation() { Value = pos });
+            if (!gw.enabled) {
+                rend.enabled = true;
+                gw.enabled = true;
+                mgr.SetComponentData(ent, gw);
             }
+        } else if (gw.enabled) {
+            gw = mgr.GetComponentData<GravityWell>(ent);
+            gw.enabled = false;
+            mgr.SetComponentData(ent, gw);
+            rend.enabled = false;
         }
-        if (newIndex > -1) {
-            for (int i = max(0, newIndex-tiles); i < min(vectorField.vectors.Length, newIndex+tiles+1); i++)
-            {
-                int i2 = i - newIndex;
-                for (int j = -tiles; j < tiles + 1; j++)
-                {
-                    var index = i + j * vectorField.size;
-                    if (index >= vectorField.vectors.Length)
-                        break;
-                    else if (index >= 0 && i2*i2 + j*j <= tiles*tiles) {
-                        vectorField.vectors[index] = new float3(-i2, -j, 0) * strength;
-                    }
-                }
-            }
-        }
-        oldIndex = newIndex;
     }
 
     private void OnDrawGizmosSelected() {

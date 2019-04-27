@@ -7,6 +7,7 @@ using Unity.Mathematics;
 public struct Gravity : IComponentData
 {
     public float mass;
+    public float minDist;
 }
 
 public class GravityProxy : ComponentDataProxy<Gravity> {}

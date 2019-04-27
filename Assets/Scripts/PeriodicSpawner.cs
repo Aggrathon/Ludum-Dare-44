@@ -12,8 +12,8 @@ public class PeriodicSpawner : MonoBehaviour
 
     public GameObject prefab;
 
-    public float rnd = 2f;
-    public float delay = 1f;
+    public float range = 1f;
+    public float delay = 0.1f;
 
     EntityManager mgr;
     Entity epref;
@@ -29,7 +29,7 @@ public class PeriodicSpawner : MonoBehaviour
         while(true) {
             yield return wfs;
             mgr.SetComponentData(mgr.Instantiate(epref), new Translation() { 
-                Value = transform.position + new Vector3(Random.Range(-rnd, rnd), Random.Range(-rnd, rnd), 0)
+                Value = transform.position + new Vector3(Random.Range(-range, range), Random.Range(-range, range), 0)
             });
         }
     }

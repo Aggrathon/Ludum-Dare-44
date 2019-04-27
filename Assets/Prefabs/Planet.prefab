@@ -12,6 +12,11 @@ PrefabInstance:
       propertyPath: m_SerializedData.mass
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: -5088639188131183298, guid: db5e60c5230db4140af7a705c8dd448c,
+        type: 3}
+      propertyPath: m_SerializedData.minDist
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6884381578717291312, guid: db5e60c5230db4140af7a705c8dd448c,
         type: 3}
       propertyPath: m_Name

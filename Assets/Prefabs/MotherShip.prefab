@@ -9,8 +9,18 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -5088639188131183298, guid: db5e60c5230db4140af7a705c8dd448c,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -5088639188131183298, guid: db5e60c5230db4140af7a705c8dd448c,
+        type: 3}
+      propertyPath: m_SerializedData.minDist
+      value: 0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: -5088639188131183298, guid: db5e60c5230db4140af7a705c8dd448c,
+        type: 3}
       propertyPath: m_SerializedData.mass
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6884381578717291312, guid: db5e60c5230db4140af7a705c8dd448c,
         type: 3}
@@ -30,7 +40,7 @@ PrefabInstance:
     - target: {fileID: 8121425528463898799, guid: db5e60c5230db4140af7a705c8dd448c,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8121425528463898799, guid: db5e60c5230db4140af7a705c8dd448c,
         type: 3}
@@ -90,7 +100,7 @@ PrefabInstance:
     - target: {fileID: 4933819534167470349, guid: db5e60c5230db4140af7a705c8dd448c,
         type: 3}
       propertyPath: m_ShapeType
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4933819534167470349, guid: db5e60c5230db4140af7a705c8dd448c,
         type: 3}
@@ -101,7 +111,7 @@ PrefabInstance:
     - target: {fileID: 4933819534167470349, guid: db5e60c5230db4140af7a705c8dd448c,
         type: 3}
       propertyPath: m_PrimitiveSize.z
-      value: 10
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4933819534167470349, guid: db5e60c5230db4140af7a705c8dd448c,
         type: 3}
@@ -116,7 +126,7 @@ PrefabInstance:
     - target: {fileID: 4933819534167470349, guid: db5e60c5230db4140af7a705c8dd448c,
         type: 3}
       propertyPath: m_Cylinder.Height
-      value: 10
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4933819534167470349, guid: db5e60c5230db4140af7a705c8dd448c,
         type: 3}
@@ -126,12 +136,12 @@ PrefabInstance:
     - target: {fileID: 4933819534167470349, guid: db5e60c5230db4140af7a705c8dd448c,
         type: 3}
       propertyPath: m_PrimitiveSize.x
-      value: 1.6
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4933819534167470349, guid: db5e60c5230db4140af7a705c8dd448c,
         type: 3}
       propertyPath: m_PrimitiveSize.y
-      value: 1
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4933819534167470349, guid: db5e60c5230db4140af7a705c8dd448c,
         type: 3}
@@ -141,12 +151,12 @@ PrefabInstance:
     - target: {fileID: 4933819534167470349, guid: db5e60c5230db4140af7a705c8dd448c,
         type: 3}
       propertyPath: m_Capsule.Height
-      value: 10
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4933819534167470349, guid: db5e60c5230db4140af7a705c8dd448c,
         type: 3}
       propertyPath: m_Capsule.Radius
-      value: 0.8
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 4933819534167470349, guid: db5e60c5230db4140af7a705c8dd448c,
         type: 3}
@@ -156,12 +166,12 @@ PrefabInstance:
     - target: {fileID: 4933819534167470349, guid: db5e60c5230db4140af7a705c8dd448c,
         type: 3}
       propertyPath: m_Cylinder.Radius
-      value: 0.8
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 4933819534167470349, guid: db5e60c5230db4140af7a705c8dd448c,
         type: 3}
       propertyPath: m_SphereRadius
-      value: 5
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 4933819534167470349, guid: db5e60c5230db4140af7a705c8dd448c,
         type: 3}
@@ -186,4 +196,5 @@ PrefabInstance:
         type: 3}
     m_RemovedComponents:
     - {fileID: -8413464927555447517, guid: db5e60c5230db4140af7a705c8dd448c, type: 3}
+    - {fileID: 4933819534167470349, guid: db5e60c5230db4140af7a705c8dd448c, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: db5e60c5230db4140af7a705c8dd448c, type: 3}

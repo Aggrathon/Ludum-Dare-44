@@ -46,8 +46,8 @@ public class VectorField : MonoBehaviour
             {
                 float3 dir = positions[i].Value - pos;
                 float magn = math.length(dir);
-                if (magn == 0) magn = 1;
-                vec += dir / math.pow(magn, 3) * masses[i].mass;
+                if (magn > masses[i].minDist)
+                    vec += dir / math.pow(magn, 3) * masses[i].mass;
             }
             vectors[index] = vec;
         }

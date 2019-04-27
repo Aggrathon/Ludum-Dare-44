@@ -191,6 +191,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SerializedData:
     mass: 2
+    minDist: 0.3
 --- !u!114 &2444109099975948486
 MonoBehaviour:
   m_ObjectHideFlags: 0
