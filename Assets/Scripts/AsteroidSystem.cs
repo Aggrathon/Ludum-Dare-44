@@ -65,7 +65,7 @@ public class AsteroidSystem : JobComponentSystem
             if (ast.mines > 0 && ast.stock < 99) {
                 if (ast.minerals > 0) {
                     ast.minerals -= ast.mines;
-                    ast.stock += ast.mines;
+                    ast.stock = min(99, ast.stock + ast.mines);
                     changes.Enqueue(new int2(ast.index, ast.stock));
                 } else if (ast.stock == 0) {
                     ast.stock = -1;

@@ -21,9 +21,9 @@ public class MouseManager : MonoBehaviour
     [Header("Mines")]
     public float blobRange = 1f;
     public int blobCost = 10;
-    public PhysicsShape asteroidPhysicsShape;
     public PhysicsShape blobPhysicsShape;
     public GameObject factoryPrefab;
+    public GameObject costText;
 
     VectorField vectorField;
     Camera camera;
@@ -64,25 +64,26 @@ public class MouseManager : MonoBehaviour
             marker.gameObject.SetActive(false);
         }
 
-        // Build Mines
+        // Build mines and move ship
         if (Input.GetMouseButtonUp(1)) {
             var pos = camera.ScreenToWorldPoint(Input.mousePosition);
             var physicsWorldSystem = mgr.World.GetOrCreateSystem<Unity.Physics.Systems.BuildPhysicsWorld>();
             physicsWorldSystem.FinalJobHandle.Complete();
             var collisionWorld = physicsWorldSystem.PhysicsWorld.CollisionWorld;
             var hit = new Unity.Physics.RaycastHit();
-            uint mask = (uint)asteroidPhysicsShape.BelongsTo;
             RaycastInput input = new RaycastInput()
             {
                 Ray = new Unity.Physics.Ray() { Origin = pos, Direction = new float3(0, 0, 100) },
-                Filter = new CollisionFilter() { CategoryBits =  mask, MaskBits = mask, GroupIndex = (int)mask }
+                Filter = new CollisionFilter() { CategoryBits = ~0u, MaskBits = ~0u, GroupIndex = 0 }
             };
             PhysicsCasting.SingleRayCast2(collisionWorld, input, out hit);
             if (hit.RigidBodyIndex >= 0) {
                 var e = collisionWorld.Bodies[hit.RigidBodyIndex].Entity;
+                // Build Mine
                 if (mgr.HasComponent(e, typeof(Asteroid))) {
+                    bool build = false;
                     NativeList<ColliderCastHit> hits = new NativeList<ColliderCastHit>(Allocator.TempJob);
-                    PhysicsCasting.SphereCast(collisionWorld, blobRange, (uint)blobPhysicsShape.BelongsTo, pos, new float3(0, 0, 100), hits);
+                    PhysicsCasting.SphereCastAll(collisionWorld, blobRange, (uint)blobPhysicsShape.BelongsTo, pos, new float3(0, 0, 100), hits);
                     if (hits.Length >= blobCost) {
                         NativeArray<Entity> torm = new NativeArray<Entity>(10, Allocator.TempJob);
                         int j = 0;
@@ -102,10 +103,25 @@ public class MouseManager : MonoBehaviour
                             var ast = mgr.GetComponentData<Asteroid>(e);
                             ast.mines++;
                             mgr.SetComponentData(e, ast);
+                            build = true;
                         }
                         torm.Dispose();
                     }
                     hits.Dispose();
+                    if (!build) {
+                        pos.z = 0.01f;
+                        costText.transform.position = pos;
+                        costText.SetActive(false);
+                        costText.SetActive(true);
+                    }
+                }
+                // Move Ship 
+                if (mgr.HasComponent(e, typeof(MotherShip))) {
+                    MotherShip ms = mgr.GetComponentData<MotherShip>(e);
+                    if (ms.lerp < 0) {
+                        ms.lerp = 0;
+                        mgr.SetComponentData(e, ms);
+                    }
                 }
             }
         }

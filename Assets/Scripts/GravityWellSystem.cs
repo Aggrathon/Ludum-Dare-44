@@ -28,10 +28,8 @@ public class GravityWellSystem : JobComponentSystem
                 float y = clamp((translation.Value.y + radius) / spacing, 0, size - 1);
                 newIndex = (int)round(x) + (int)round(y) * size;
             }
-            if (well.lastIndex == newIndex)
-                return;
-
-            if (well.lastIndex > -1) {
+            
+            if (well.lastIndex > -1 && well.lastIndex != newIndex) {
                 for (int i = max(0, well.lastIndex-well.range); i < min(vectorField.Length, well.lastIndex + well.range + 1); i++)
                 {
                     for (int j = -well.range; j < well.range + 1; j++)

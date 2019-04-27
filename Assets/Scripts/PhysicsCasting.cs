@@ -77,7 +77,7 @@ public static class PhysicsCasting
     }
 
 
-    public unsafe static void SphereCast(CollisionWorld world, float radius, uint mask, float3 origin, float3 direction, NativeList<ColliderCastHit> results) {
+    public unsafe static void SphereCastAll(CollisionWorld world, float radius, uint mask, float3 origin, float3 direction, NativeList<ColliderCastHit> results) {
         var sphereCollider = Unity.Physics.SphereCollider.Create(float3.zero, radius,
             new CollisionFilter() { CategoryBits = mask, MaskBits = mask, GroupIndex = (int)mask});
         ColliderCastInput input = new ColliderCastInput()
@@ -88,5 +88,20 @@ public static class PhysicsCasting
             Collider = (Collider*)sphereCollider.GetUnsafePtr()
         };
         world.CastCollider(input, ref results);
+    }
+
+    public unsafe static ColliderCastHit SphereCast(CollisionWorld world, float radius, uint mask, float3 origin, float3 direction) {
+        var sphereCollider = Unity.Physics.SphereCollider.Create(float3.zero, radius,
+            new CollisionFilter() { CategoryBits = mask, MaskBits = mask, GroupIndex = (int)mask});
+        ColliderCastInput input = new ColliderCastInput()
+        {
+            Position  = origin,
+            Orientation = quaternion.identity,
+            Direction = direction,
+            Collider = (Collider*)sphereCollider.GetUnsafePtr()
+        };
+        ColliderCastHit hit = new ColliderCastHit() { RigidBodyIndex = -1 };
+        world.CastCollider(input, out hit);
+        return hit;
     }
 }
