@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 8407261520305767548}
   - component: {fileID: 7878408342975985003}
   - component: {fileID: -1055347333125623836}
+  - component: {fileID: -1344452010741911169}
   m_Layer: 0
   m_Name: Blob
   m_TagString: Untagged
@@ -137,7 +138,7 @@ MonoBehaviour:
         CombineMode: 2
     m_BelongsTo:
       m_Override: 0
-      m_Value: 0101010101010101010101010101010101010101010101010101010101010101
+      m_Value: 0000000001000000000000000000000000000000000000000000000000000000
     m_CollidesWith:
       m_Override: 0
       m_Value: 0101010101010101010101010101010101010101010101010101010101010101
@@ -212,3 +213,15 @@ MonoBehaviour:
     x: 100
     y: 100
     z: 0.4
+--- !u!114 &-1344452010741911169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2704925061492415385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f310bac472545049ab7b3e0e2438b33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
