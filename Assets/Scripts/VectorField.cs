@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using Unity.Collections;
 using Unity.Mathematics;
@@ -15,15 +16,19 @@ public class VectorField : MonoBehaviour
     public float planetGravity = 10f;
 
     public NativeArray<float3> vectors;
+    public NativeArray<float3> reset;
     
     CalcVector job;
     JobHandle jobH;
+
+    [System.NonSerialized] public int size;
 
 
     [BurstCompile]
     struct CalcVector : IJobParallelFor
     {
-        [ReadOnly] public NativeArray<Translation> asteroids;
+        [ReadOnly] public NativeArray<Translation> positions;
+        [ReadOnly] public NativeArray<Gravity> masses;
         [WriteOnly] public NativeArray<float3> vectors;
 
         public float radius;
@@ -38,42 +43,48 @@ public class VectorField : MonoBehaviour
                 -radius + (int)(index % width) * spacing,
                 -radius + (int)(index / width) * spacing,
                 0);
-            float3 vec = - pos  / math.pow(math.length(pos), 3) * planet;
-            for (int i = 0; i < asteroids.Length; i++)
+            float3 vec = new float3(0, 0, 0);
+            for (int i = 0; i < positions.Length; i++)
             {
-                float3 dir = asteroids[i].Value - pos;
+                float3 dir = positions[i].Value - pos;
                 float magn = math.length(dir);
                 if (magn == 0) magn = 1;
-                vec += dir / math.pow(magn, 3);
+                vec += dir / math.pow(magn, 3) * masses[i].mass;
             }
             vectors[index] = vec;
         }
     }
 
     private void Awake() {
-        int size = (int) (radius * 2 / spacing);
+        size = (int) (radius * 2 / spacing);
         vectors = new NativeArray<float3>(size * size, Allocator.Persistent);
-        var query = World.Active.EntityManager.CreateEntityQuery(typeof(Translation), typeof(Asteroid));
-        JobHandle handle;
+        reset = new NativeArray<float3>(size * size, Allocator.Persistent);
+        var query = World.Active.EntityManager.CreateEntityQuery(typeof(Translation), typeof(Gravity));
+        JobHandle handle1;
+        JobHandle handle2;
         job.vectors = vectors;
         job.radius = radius;
         job.width = size;
         job.spacing = spacing;
         job.planet = planetGravity;
-        job.asteroids = query.ToComponentDataArray<Translation>(Allocator.TempJob, out handle);
-        jobH = job.Schedule(vectors.Length, 32, handle);
+        job.positions = query.ToComponentDataArray<Translation>(Allocator.TempJob, out handle1);
+        job.masses = query.ToComponentDataArray<Gravity>(Allocator.TempJob, out handle2);
+        jobH = job.Schedule(vectors.Length, 32, JobHandle.CombineDependencies(handle1, handle2));
         
     }
 
     void Start()
     {
         jobH.Complete();
-        job.asteroids.Dispose();
+        job.positions.Dispose();
+        job.masses.Dispose();
+        reset.CopyFrom(vectors);
         enabled = false;
     }
 
     private void OnDestroy() {
         vectors.Dispose();
+        reset.Dispose();
     }
 
     private void OnDrawGizmosSelected() {
@@ -84,5 +95,30 @@ public class VectorField : MonoBehaviour
             float3 pos = new float3(-radius + (int)(i % size) * spacing, -radius + (int)(i / size) * spacing, 0);
             Gizmos.DrawLine(pos, pos + vectors[i] / math.length(vectors[i]) * spacing);
         }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public int CoordToIndex(float3 pos) {
+        float x = math.clamp((pos.x + radius) / spacing, 0, size - 1);
+        float y = math.clamp((pos.y + radius) / spacing, 0, size - 1);
+        return (int)math.round(x) + (int)math.round(y) * size;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public float3 CoordToVec(float3 pos) {
+        return vectors[CoordToIndex(pos)];
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public float3 IndexToCoord(int index) {
+        return new float3(
+            -radius + (int)(index % size) * spacing,
+            -radius + (int)(index / size) * spacing,
+            0);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public float3 IndexToVec(int index) {
+        return vectors[index];
     }
 }

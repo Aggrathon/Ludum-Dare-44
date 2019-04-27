@@ -14,7 +14,9 @@ public struct Asteroid : IComponentData
     }
 
     public Resource resource;
-    [NonSerialized] public int index;
+    public int stock;
+    public int mines;
+    public int minerals;
 }
 
 public class AsteroidProxy : ComponentDataProxy<Asteroid> {
