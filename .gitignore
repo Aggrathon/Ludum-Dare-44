@@ -39,3 +39,5 @@ sysinfo.txt
 ## OWN
 .vscode
 Assets/EntityCache*
+*.blend1
+*.blend2
