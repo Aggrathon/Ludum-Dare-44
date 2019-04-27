@@ -9,6 +9,4 @@ public struct Gravity : IComponentData
     public float mass;
 }
 
-public class GravityProxy : ComponentDataProxy<Gravity> {
-
-}
+public class GravityProxy : ComponentDataProxy<Gravity> {}

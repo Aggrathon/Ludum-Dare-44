@@ -8,7 +8,7 @@ using static Unity.Mathematics.math;
 using Unity.Physics;
 using UnityEngine;
 
-[UpdateAfter(typeof(Unity.Physics.Systems.EndFramePhysicsSystem))]
+//[UpdateAfter(typeof(Unity.Physics.Systems.EndFramePhysicsSystem))]
 public class GravitySystem : JobComponentSystem
 {
     public VectorField vectorField;

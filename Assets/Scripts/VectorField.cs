@@ -13,7 +13,6 @@ public class VectorField : MonoBehaviour
 {
     public float radius = 17f;
     public float spacing = 0.25f;
-    public float planetGravity = 10f;
 
     public NativeArray<float3> vectors;
     public NativeArray<float3> reset;
@@ -33,7 +32,6 @@ public class VectorField : MonoBehaviour
 
         public float radius;
         public float spacing;
-        public float planet;
 
         public int width;
 
@@ -66,11 +64,9 @@ public class VectorField : MonoBehaviour
         job.radius = radius;
         job.width = size;
         job.spacing = spacing;
-        job.planet = planetGravity;
         job.positions = query.ToComponentDataArray<Translation>(Allocator.TempJob, out handle1);
         job.masses = query.ToComponentDataArray<Gravity>(Allocator.TempJob, out handle2);
         jobH = job.Schedule(vectors.Length, 32, JobHandle.CombineDependencies(handle1, handle2));
-        
     }
 
     void Start()

@@ -17,6 +17,7 @@ public class AsteroidSpawner : MonoBehaviour
     public GameObject[] prefabs;
     [Range(0, 1)] public float square = 0.3f;
 
+
     [ContextMenu("Spawn Asteroids")]
     public void SpawnAsteroids() {
         for (int i = transform.childCount-1; i >= 0; i--)
@@ -53,9 +54,5 @@ public class AsteroidSpawner : MonoBehaviour
                 }
             }
         }
-    }
-
-    private void Start() {
-        enabled = false;
     }
 }
