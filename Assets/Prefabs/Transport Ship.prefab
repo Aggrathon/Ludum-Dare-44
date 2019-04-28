@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SerializedData:
-    minDist: 0.5
+    minDist: 1
     inventory: 0
     resource: 0
 --- !u!1001 &7437927076223132665

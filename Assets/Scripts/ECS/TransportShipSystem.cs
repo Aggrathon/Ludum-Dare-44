@@ -16,6 +16,7 @@ public class TransportShipSystem : ComponentSystem
         if(!state) state = UnityEngine.GameObject.FindObjectOfType<GameState>();
         Entities.ForEach((Entity ent, ref Navigator nav, ref TransportShip ship, ref Translation trans) => {
             var pos = EntityManager.GetComponentData<Translation>(ship.target).Value;
+            pos.z = trans.Value.z;
             if (distancesq(trans.Value, pos) < ship.minDist * ship.minDist) {
                 switch(ship.resource) {
                     case Asteroid.Resource.Water:

@@ -20,8 +20,7 @@ public class AsteroidSystem : JobComponentSystem
     Entity shipPrefab;
     Entity target;
 
-    override protected void OnCreate() {
-        timeout = 0f;
+    void CreateTexts() {
         changes = new NativeQueue<int2>(Allocator.Persistent);
         launches = new NativeQueue<int>(Allocator.Persistent);
         cache = new string[101];
@@ -35,9 +34,6 @@ public class AsteroidSystem : JobComponentSystem
         settings = GameObject.FindObjectOfType<AsteroidSettings>();
         state = GameObject.FindObjectOfType<GameState>();
         shipPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(settings.shipPrefab, World);
-    }
-
-    void CreateTexts() {
         var mgr = EntityManager;
         var q = mgr.CreateEntityQuery(typeof(Translation), typeof(Asteroid));
         JobHandle jh;
@@ -99,7 +95,7 @@ public class AsteroidSystem : JobComponentSystem
     {
         timeout -= Time.deltaTime;
         if (timeout < 0) {
-            if (texts == null) CreateTexts();
+            if (!settings) CreateTexts();
             timeout += settings.tickTime;
             var job = new AsteroidSystemJob() {
                 changes = changes.ToConcurrent(),
@@ -112,7 +108,7 @@ public class AsteroidSystem : JobComponentSystem
                 texts[todo.x].text = cache[todo.y + 1];
             }
             int l;
-            while(state.aluminium > settings.shipCost && launches.TryDequeue(out l)) {
+            while(launches.TryDequeue(out l)) {
                 SpawnShip(l);
             }
             return job.Schedule(this, inputDependencies);
@@ -122,8 +118,13 @@ public class AsteroidSystem : JobComponentSystem
 
     void SpawnShip(int index) {
         var mgr = EntityManager;
-        state.aluminium -= settings.shipCost;
         var ast = mgr.GetComponentData<Asteroid>(entities[index]);
+        if (state.aluminium > settings.shipCost)
+            state.aluminium -= settings.shipCost;
+        else if (ast.resource == Asteroid.Resource.Aluminium && ast.stock > settings.shipCost)
+            ast.stock -= settings.shipCost;
+        else
+            return;
         var ent = mgr.Instantiate(shipPrefab);
         float3 pos = texts[index].transform.position;
         var tar = mgr.GetComponentData<Translation>(target).Value;
