@@ -11,6 +11,7 @@ public struct Navigator : IComponentData
     public float speed;
     public float turning;
     public bool pause;
+    public float avoidance;
 }
 
 public class NavigatorProxy : ComponentDataProxy<Navigator>
