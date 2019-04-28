@@ -13,6 +13,7 @@ using Unity.Rendering;
 public class EnemySystem : JobComponentSystem
 {
     BuildPhysicsWorld physicsWorldSystem;
+    EntityCommandBufferSystem buffer;
     Entity lazerPrefab;
     Entity explosionPrefab;
     EnemySettings settings;
@@ -23,14 +24,15 @@ public class EnemySystem : JobComponentSystem
         public bool lazer;
     }
 
-    [BurstCompile]
+    //[BurstCompile]
     struct EnemySystemJob : IJobForEachWithEntity<Translation, Enemy>
     {
         public float deltaTime;
         public uint mask;
-        public NativeQueue<Entity>.Concurrent destroy;
-        public NativeQueue<Spawn>.Concurrent spawn;
+        public EntityCommandBuffer.Concurrent cmd;
         [ReadOnly] public CollisionWorld world;
+        public Entity lazerPrefab;
+        public Entity explosionPrefab;
 
         public void Execute(Entity ent, int index, [ReadOnly] ref Translation translation, ref Enemy enemy)
         {
@@ -43,58 +45,47 @@ public class EnemySystem : JobComponentSystem
             };
             DistanceHit hit;
             if (world.CalculateDistance(input, out hit)) {
-                destroy.Enqueue(ent);
-                destroy.Enqueue(world.Bodies[hit.RigidBodyIndex].Entity);
-                spawn.Enqueue(new Spawn() { pos = hit.Position, lazer = false });
+                cmd.DestroyEntity(index, ent);
+                cmd.DestroyEntity(index, world.Bodies[hit.RigidBodyIndex].Entity);
+                var e = cmd.Instantiate(index, lazerPrefab);
+                cmd.SetComponent(index, e, new Translation() { Value = hit.Position });
             } else if (enemy.timer < 0) {
                 input.MaxDistance = enemy.rangeShoot;
                 if (world.CalculateDistance(input, out hit)) {
                     var dir = hit.Position - translation.Value;
                     dir *= enemy.rangeShoot / math.length(dir) * 0.5f;
-                    destroy.Enqueue(world.Bodies[hit.RigidBodyIndex].Entity);
-                    spawn.Enqueue(new Spawn() { pos = translation.Value + dir, rot = math.atan2(dir.y, dir.x), lazer = true });
+                    cmd.DestroyEntity(index, world.Bodies[hit.RigidBodyIndex].Entity);
+                    var e = cmd.Instantiate(index, lazerPrefab);
+                    cmd.SetComponent(index, e, new Translation() { Value = translation.Value + dir });
+                    cmd.SetComponent(index, e, new Rotation() { Value = quaternion.RotateZ(math.atan2(dir.y, dir.x)) });
                     enemy.timer = enemy.cooldown;
                 }
             }
         }
     }
 
-    protected override void OnCreateManager() {
+    protected void Setup() {
         physicsWorldSystem = EntityManager.World.GetOrCreateSystem<BuildPhysicsWorld>();
         settings = UnityEngine.GameObject.FindObjectOfType<EnemySettings>();
+        buffer = EntityManager.World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
         lazerPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(settings.lazerPrefab, World);
         explosionPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(settings.explosionPrefab, World);
     }
     
     protected override JobHandle OnUpdate(JobHandle inputDependencies)
     {
-        var destroy = new NativeQueue<Entity>(Allocator.TempJob);
-        var spawn = new NativeQueue<Spawn>(Allocator.TempJob);
+        if (!settings) Setup();
         var job = new EnemySystemJob() {
             deltaTime = UnityEngine.Time.deltaTime,
             world = physicsWorldSystem.PhysicsWorld.CollisionWorld,
             mask = (uint)settings.blobShape.BelongsTo,
-            destroy = destroy.ToConcurrent(),
-            spawn = spawn.ToConcurrent()
+            cmd = buffer.CreateCommandBuffer().ToConcurrent(),
+            lazerPrefab = lazerPrefab,
+            explosionPrefab = explosionPrefab
         };
         var jh = JobHandle.CombineDependencies(inputDependencies, physicsWorldSystem.FinalJobHandle);
         jh = job.Schedule(this, jh);
-        jh.Complete();
-        Entity ent;
-        while(destroy.TryDequeue(out ent)) EntityManager.DestroyEntity(ent);
-        Spawn sp;
-        while(spawn.TryDequeue(out sp)) {
-            if (sp.lazer) {
-                var e = EntityManager.Instantiate(lazerPrefab);
-                EntityManager.SetComponentData(e, new Translation() { Value = sp.pos });
-                EntityManager.SetComponentData(e, new Rotation() { Value = quaternion.RotateZ(sp.rot) });
-            } else {
-                var e = EntityManager.Instantiate(explosionPrefab);
-                EntityManager.SetComponentData(e, new Translation() { Value = sp.pos });
-            }
-        }
-        destroy.Dispose();
-        spawn.Dispose();
+        buffer.AddJobHandleForProducer(jh);
         return jh;
     }
 }

@@ -49,7 +49,7 @@ public class MotherShipSpawnSystem : ComponentSystem
 
     Entity prefab;
 
-    protected override void OnCreateManager() {
+    protected void Setup() {
         settings = UnityEngine.GameObject.FindObjectOfType<BlobSpawnSettings>();
         state = UnityEngine.GameObject.FindObjectOfType<GameState>();
         prefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(settings.blobPrefab, World);
@@ -57,6 +57,7 @@ public class MotherShipSpawnSystem : ComponentSystem
 
     protected override void OnUpdate()
     {
+        if (!settings) Setup();
         Entities.ForEach((ref Translation translation, ref MotherShip ship) => {
             ship.timer -= UnityEngine.Time.deltaTime;
             if (ship.timer < 0 && ship.lerp < 0 && state.iron > settings.spawnCost) {

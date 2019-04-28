@@ -20,7 +20,7 @@ public class AsteroidSystem : JobComponentSystem
     Entity shipPrefab;
     Entity target;
 
-    override protected void OnCreateManager() {
+    override protected void OnCreate() {
         timeout = 0f;
         changes = new NativeQueue<int2>(Allocator.Persistent);
         launches = new NativeQueue<int>(Allocator.Persistent);

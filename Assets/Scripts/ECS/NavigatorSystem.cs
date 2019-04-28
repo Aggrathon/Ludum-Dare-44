@@ -61,13 +61,11 @@ public class NavigatorSystem : JobComponentSystem
     }
 
     VectorField vectorField;
-
-    override protected void OnCreateManager() {
-        vectorField = UnityEngine.GameObject.FindObjectOfType<VectorField>();
-    }
     
     protected override JobHandle OnUpdate(JobHandle inputDependencies)
     {
+        if (!vectorField)
+            vectorField = UnityEngine.GameObject.FindObjectOfType<VectorField>();
         var job = new NavigatorSystemJob() {
             vectorField = vectorField.reset,
             spacing = vectorField.spacing,

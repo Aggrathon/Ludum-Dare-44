@@ -11,12 +11,9 @@ public class TransportShipSystem : ComponentSystem
 {
     GameState state;
 
-    protected override void OnCreateManager() {
-        state = UnityEngine.GameObject.FindObjectOfType<GameState>();
-    }
-
     protected override void OnUpdate()
     {
+        if(!state) state = UnityEngine.GameObject.FindObjectOfType<GameState>();
         Entities.ForEach((Entity ent, ref Navigator nav, ref TransportShip ship, ref Translation trans) => {
             var pos = EntityManager.GetComponentData<Translation>(ship.target).Value;
             if (distancesq(trans.Value, pos) < ship.minDist * ship.minDist) {

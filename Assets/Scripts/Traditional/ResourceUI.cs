@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
+using Unity.Entities;
 
 public class ResourceUI : MonoBehaviour
 {
@@ -33,5 +35,16 @@ public class ResourceUI : MonoBehaviour
             oldAlum = state.aluminium;
             alumText.text = oldAlum.ToString();
         }
+    }
+
+    public void Restart() {
+        var mgr = World.Active.EntityManager;
+        var ent = mgr.GetAllEntities();
+        for (int i = 0; i < ent.Length; i++)
+        {
+            mgr.DestroyEntity(ent);
+        }
+        ent.Dispose();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

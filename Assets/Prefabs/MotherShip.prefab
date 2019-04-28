@@ -165,19 +165,19 @@ MonoBehaviour:
     pos1:
       x: -13
       y: -13
-      z: 0
+      z: 1
     pos2:
       x: 13
       y: -13
-      z: 0
+      z: 1
     pos3:
       x: 13
       y: 13
-      z: 0
+      z: 1
     pos4:
       x: -13
       y: 13
-      z: 0
+      z: 1
     speed: 0.5
     current: 3
     lerp: 0.5

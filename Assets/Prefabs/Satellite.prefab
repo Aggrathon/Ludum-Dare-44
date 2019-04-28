@@ -138,6 +138,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SerializedData:
-    rangeShoot: 1.5
+    rangeShoot: 2
     rangeDie: 0.25
-    cooldown: 0.5
+    cooldown: 0.1

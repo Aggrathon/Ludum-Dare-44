@@ -11,11 +11,7 @@ using UnityEngine;
 [UpdateAfter(typeof(Unity.Physics.Systems.EndFramePhysicsSystem))]
 public class GravitySystem : JobComponentSystem
 {
-    public VectorField vectorField;
-
-    override protected void OnCreateManager() {
-        vectorField = GameObject.FindObjectOfType<VectorField>();
-    }
+    VectorField vectorField;
     
     [BurstCompile]
     struct GravitySystemJob : IJobForEach<Translation, PhysicsVelocity>
@@ -41,6 +37,8 @@ public class GravitySystem : JobComponentSystem
     
     protected override JobHandle OnUpdate(JobHandle inputDependencies)
     {
+        if (!vectorField)
+            vectorField = GameObject.FindObjectOfType<VectorField>();
         var job = new GravitySystemJob() {
             vectorField = vectorField.vectors,
             radius = vectorField.radius,

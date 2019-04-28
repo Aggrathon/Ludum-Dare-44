@@ -60,13 +60,11 @@ public class GravityWellSystem : JobComponentSystem
             well.lastIndex = newIndex;
         }
     }
-
-    protected override void OnCreateManager() {
-        vectorField = GameObject.FindObjectOfType<VectorField>();
-    }
     
     protected override JobHandle OnUpdate(JobHandle inputDependencies)
     {
+        if (!vectorField)
+            vectorField = GameObject.FindObjectOfType<VectorField>();
         var job = new GravityWellSystemJob() {
             vectorField = vectorField.vectors,
             reset = vectorField.reset,

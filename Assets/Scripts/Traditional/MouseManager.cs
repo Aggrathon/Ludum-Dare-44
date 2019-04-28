@@ -75,7 +75,7 @@ public class MouseManager : MonoBehaviour
                 noWaterText.transform.position = pos;
                 noWaterText.SetActive(true);
             }
-            if (gw.enabled) {
+            if (gw.enabled && mgr.Exists(ent)) {
                 gw = mgr.GetComponentData<GravityWell>(ent);
                 gw.enabled = false;
                 mgr.SetComponentData(ent, gw);

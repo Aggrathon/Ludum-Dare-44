@@ -283,7 +283,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SerializedData:
-    mass: 20
+    mass: 30
     minDist: 3
 --- !u!114 &5279115551871078098
 MonoBehaviour:
