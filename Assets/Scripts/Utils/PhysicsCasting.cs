@@ -152,4 +152,77 @@ public static class PhysicsCasting
         };
         job.Schedule().Complete();
     }
+
+    [BurstCompile]
+    public struct PointRangeSingleJob : IJob
+    {
+        [ReadOnly] public CollisionWorld world;
+        [ReadOnly] public PointDistanceInput input;
+        public DistanceHit result;
+        public bool hit;
+
+        public unsafe void Execute()
+        {
+            DistanceHit dh;
+            hit = world.CalculateDistance(input, out dh);
+            result = dh;
+        }
+    }
+
+    public unsafe static bool PointRangeSingle(CollisionWorld world, float radius, uint mask, float3 pos, out DistanceHit hit) {
+        var job = new PointRangeSingleJob() {
+            world = world,
+            input = new PointDistanceInput()
+            {
+                MaxDistance = radius,
+                Filter = new CollisionFilter() { CategoryBits = mask, MaskBits = mask, GroupIndex = 0 },
+                Position = pos
+            }
+        };
+        job.Schedule().Complete();
+        hit = job.result;
+        return job.hit;
+    }
+
+    [BurstCompile]
+    public struct PointRangesJob : IJobParallelFor
+    {
+        [ReadOnly] public CollisionWorld world;
+        [ReadOnly] public NativeArray<PointDistanceInput> inputs;
+        public NativeArray<DistanceHit> results;
+
+        public unsafe void Execute(int index)
+        {
+            DistanceHit hit;
+            if (!world.CalculateDistance(inputs[index], out hit))
+                hit = new DistanceHit() { RigidBodyIndex = -1 };
+            results[index] = hit;
+        }
+    }
+
+    public unsafe static JobHandle PointRanges(CollisionWorld world, NativeArray<PointDistanceInput> inputs, NativeArray<DistanceHit> hits) {
+        var job = new PointRangesJob() {
+            world = world,
+            inputs = inputs,
+            results = hits
+        };
+        return job.Schedule(inputs.Length, 4);
+    }
+
+    public unsafe static bool PointRangeSingle2(CollisionWorld world, float radius, uint mask, float3 pos, out DistanceHit hit) {
+        var rayCommands = new NativeArray<PointDistanceInput>(1, Allocator.TempJob);
+        var rayResults = new NativeArray<DistanceHit>(1, Allocator.TempJob);
+        rayCommands[0] = new PointDistanceInput()
+        {
+            MaxDistance = radius,
+            Filter = new CollisionFilter() { CategoryBits = mask, MaskBits = mask, GroupIndex = 0 },
+            Position = pos
+        };
+        var handle = PointRanges(world, rayCommands, rayResults);
+        handle.Complete();
+        hit = rayResults[0];
+        rayCommands.Dispose();
+        rayResults.Dispose();
+        return hit.RigidBodyIndex != -1;
+    }
 }

@@ -383,7 +383,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 995eae29c4bead647b0f509b0d048805, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalHealth: 200
+  totalHealth: 1000
   progress: {fileID: 8028656060192078666}
   blobShape: {fileID: 7438035898357271358, guid: 8b501f81024422e41a7f53fc9c88aecc,
     type: 3}
