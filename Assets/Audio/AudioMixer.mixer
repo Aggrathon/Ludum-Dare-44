@@ -14,6 +14,39 @@ AudioMixerEffectController:
   m_SendTarget: {fileID: 0}
   m_EnableWetMix: 0
   m_Bypass: 0
+--- !u!243 &-3369579423335699925
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: FX
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: 80a4ba40c595d3d41ad2d782e3e3df1d
+  m_Children: []
+  m_Volume: 7bf381f998e6bee4189ee0f74d61d8c7
+  m_Pitch: fe2b93855c4620146b39d79c098212eb
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: -1125128613554008518}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
+--- !u!244 &-1125128613554008518
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: ce94e72ad83367f47bdd034204e17b0d
+  m_EffectName: Attenuation
+  m_MixLevel: 0054890e282b42940a4bbba9dda9e59f
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
 --- !u!241 &24100000
 AudioMixerController:
   m_ObjectHideFlags: 0
@@ -34,6 +67,7 @@ AudioMixerController:
   - guids:
     - d469c4151f02ace4eaaafea42558f8a8
     - e47f5b8fd88cb5c458e730dd4c19bd62
+    - 80a4ba40c595d3d41ad2d782e3e3df1d
     name: View
   m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
@@ -48,6 +82,7 @@ AudioMixerGroupController:
   m_GroupID: d469c4151f02ace4eaaafea42558f8a8
   m_Children:
   - {fileID: 4903803645966703704}
+  - {fileID: -3369579423335699925}
   m_Volume: 39c51fb9da8fe1b499dc4188d0cfcc5b
   m_Pitch: 3b8be3d09dea90946841c48505197e7d
   m_Send: 00000000000000000000000000000000
@@ -90,6 +125,7 @@ AudioMixerSnapshotController:
     c7d0d7b36aff3d243bcce70bbb0ca7b9: 0.033
     b9f5fb188aad8ed47b94d072a4ad767e: 44.2
     7fb6d9985f0a56246b192f9f43f8dd3d: 109
+    7bf381f998e6bee4189ee0f74d61d8c7: 9.925883
     707b7f7a3e4796946be50771c11538de: 0
     02f43c1dba932ff469bbea5b41a84b7e: 2000
     9a721f6e6077be540aebdb5d32c48ee3: 0.0609

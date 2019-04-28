@@ -39,6 +39,7 @@ public class MouseManager : MonoBehaviour
     GravityWell gw;
     Entity fp;
     GameState state;
+    AudioManager audio;
 
     void Start()
     {
@@ -51,6 +52,7 @@ public class MouseManager : MonoBehaviour
         mgr.SetComponentData(ent, gw);
         marker.gameObject.SetActive(false);
         fp = GameObjectConversionUtility.ConvertGameObjectHierarchy(factoryPrefab, mgr.World);
+        audio = FindObjectOfType<AudioManager>();
     }
 
     void Update()
@@ -128,6 +130,7 @@ public class MouseManager : MonoBehaviour
                                 ast.mines++;
                                 mgr.SetComponentData(e, ast);
                                 build = true;
+                                audio.Play(tr.Value, 2);
                             }
                             torm.Dispose();
                         }

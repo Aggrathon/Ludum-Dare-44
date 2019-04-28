@@ -47,7 +47,7 @@ public class EnemySystem : JobComponentSystem
             if (world.CalculateDistance(input, out hit)) {
                 cmd.DestroyEntity(index, ent);
                 cmd.DestroyEntity(index, world.Bodies[hit.RigidBodyIndex].Entity);
-                var e = cmd.Instantiate(index, lazerPrefab);
+                var e = cmd.Instantiate(index, explosionPrefab);
                 cmd.SetComponent(index, e, new Translation() { Value = hit.Position });
             } else if (enemy.timer < 0) {
                 input.MaxDistance = enemy.rangeShoot;
