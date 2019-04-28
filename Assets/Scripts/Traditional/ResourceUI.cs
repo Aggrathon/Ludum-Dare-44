@@ -39,12 +39,15 @@ public class ResourceUI : MonoBehaviour
 
     public void Restart() {
         var mgr = World.Active.EntityManager;
+        mgr.ExclusiveEntityTransactionDependency.Complete();
         var ent = mgr.GetAllEntities();
         for (int i = 0; i < ent.Length; i++)
         {
             mgr.DestroyEntity(ent);
         }
         ent.Dispose();
+        mgr.ExclusiveEntityTransactionDependency.Complete();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        mgr.ExclusiveEntityTransactionDependency.Complete();
     }
 }
