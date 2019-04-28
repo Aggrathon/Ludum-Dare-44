@@ -7,6 +7,7 @@ using UnityEngine;
 [Serializable]
 public struct MotherShip : IComponentData
 {
+    [Header("Movement")]
     public float3 pos1;
     public float3 pos2;
     public float3 pos3;
@@ -15,6 +16,11 @@ public struct MotherShip : IComponentData
     public float speed;
     public int current;
     public float lerp;
+
+    [Header("Spawning")]
+    public float delay;
+    public float range;
+    [NonSerialized] public float timer;
 
     public float3 GetPos(int index) {
         switch (index % 4) {

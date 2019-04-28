@@ -181,6 +181,8 @@ MonoBehaviour:
     speed: 0.5
     current: 3
     lerp: 0.5
+    delay: 0.05
+    range: 0.5
 --- !u!114 &-4188920035575176128
 MonoBehaviour:
   m_ObjectHideFlags: 0

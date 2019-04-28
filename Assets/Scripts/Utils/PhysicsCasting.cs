@@ -19,8 +19,8 @@ public static class PhysicsCasting
 
         public unsafe void Execute(int index)
         {
-            RaycastHit hit = new RaycastHit() { RigidBodyIndex = -1 };
-            world.CastRay(inputs[index], out hit);
+            RaycastHit hit;
+            if(!world.CastRay(inputs[index], out hit)) hit = new RaycastHit() { RigidBodyIndex = -1 };
             results[index] = hit;
         }
     }

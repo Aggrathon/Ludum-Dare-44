@@ -80,7 +80,8 @@ public class AsteroidSystem : JobComponentSystem
                         ast.stock = math.min(99, ast.stock + ast.mines);
                         changes.Enqueue(new int2(ast.index, ast.stock));
                     }
-                    if (ast.stock > minShip)
+                    ast.shipTicks--;
+                    if (ast.stock > minShip && ast.shipTicks < 0)
                         launches.Enqueue(ast.index);
                 } else if (ast.stock >= 0) {
                     if (ast.stock > 0) {
@@ -136,6 +137,7 @@ public class AsteroidSystem : JobComponentSystem
         ship.resource = ast.resource;
         mgr.SetComponentData(ent, ship);
         ast.stock = 0;
+        ast.shipTicks = ast.minShipTicks;
         texts[index].text = cache[1];
         mgr.SetComponentData(entities[index], ast);
     }

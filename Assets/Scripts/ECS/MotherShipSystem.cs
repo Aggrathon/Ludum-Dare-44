@@ -41,3 +41,33 @@ public class MotherShipSystem : JobComponentSystem
         return job.Schedule(this, inputDependencies);
     }
 }
+
+public class MotherShipSpawnSystem : ComponentSystem
+{
+    GameState state;
+    BlobSpawnSettings settings;
+
+    Entity prefab;
+
+    protected override void OnCreateManager() {
+        settings = UnityEngine.GameObject.FindObjectOfType<BlobSpawnSettings>();
+        state = UnityEngine.GameObject.FindObjectOfType<GameState>();
+        prefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(settings.blobPrefab, World);
+    }
+
+    protected override void OnUpdate()
+    {
+        Entities.ForEach((ref Translation translation, ref MotherShip ship) => {
+            ship.timer -= UnityEngine.Time.deltaTime;
+            if (ship.timer < 0 && ship.lerp < 0 && state.iron > settings.spawnCost) {
+                var ent = PostUpdateCommands.Instantiate(prefab);
+                var pos = translation.Value + new float3(
+                    UnityEngine.Random.Range(-ship.range, ship.range),
+                    UnityEngine.Random.Range(-ship.range, ship.range), 0);
+                PostUpdateCommands.SetComponent(ent, new Translation() { Value = pos });
+                state.iron -= settings.spawnCost;
+                ship.timer += ship.delay;
+            }
+        });
+    }
+}

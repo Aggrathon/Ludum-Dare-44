@@ -67,6 +67,7 @@ MonoBehaviour:
     stock: 0
     mines: 0
     minerals: 0
+    minShipTicks: 20
 --- !u!114 &4933819534167470349
 MonoBehaviour:
   m_ObjectHideFlags: 0
