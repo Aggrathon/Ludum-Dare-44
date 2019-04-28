@@ -104,4 +104,52 @@ public static class PhysicsCasting
         world.CastCollider(input, out hit);
         return hit;
     }
+
+    public unsafe static void ColliderRange(CollisionWorld world, float radius, Collider coll, RigidTransform trans, ref NativeList<DistanceHit> hits) {
+        ColliderDistanceInput input = new ColliderDistanceInput()
+        {
+            MaxDistance = radius,
+            Collider = &coll,
+            Transform = trans
+        };
+        world.CalculateDistance(input, ref hits);
+    }
+
+    
+    [BurstCompile]
+    public struct PointRangeJob : IJob
+    {
+        [ReadOnly] public CollisionWorld world;
+        [ReadOnly] public PointDistanceInput input;
+        public NativeList<DistanceHit> result;
+
+        public unsafe void Execute()
+        {
+            world.CalculateDistance(input, ref result);
+        }
+    }
+
+    public unsafe static void PointRange(CollisionWorld world, float radius, uint mask, float3 pos, ref NativeList<DistanceHit> hits) {
+        PointDistanceInput input = new PointDistanceInput()
+        {
+            MaxDistance = radius,
+            Filter = new CollisionFilter() { CategoryBits = mask, MaskBits = mask, GroupIndex = 0 },
+            Position = pos
+        };
+        world.CalculateDistance(input, ref hits);
+    }
+
+    public unsafe static void PointRange2(CollisionWorld world, float radius, uint mask, float3 pos, ref NativeList<DistanceHit> hits) {
+        var job = new PointRangeJob() {
+            world = world,
+            result = hits,
+            input = new PointDistanceInput()
+            {
+                MaxDistance = radius,
+                Filter = new CollisionFilter() { CategoryBits = mask, MaskBits = mask, GroupIndex = 0 },
+                Position = pos
+            }
+        };
+        job.Schedule().Complete();
+    }
 }
