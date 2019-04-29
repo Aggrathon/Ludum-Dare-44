@@ -18,12 +18,6 @@ public class EnemySystem : JobComponentSystem
     Entity explosionPrefab;
     EnemySettings settings;
 
-    struct Spawn {
-        public float3 pos;
-        public float rot;
-        public bool lazer;
-    }
-
     //[BurstCompile]
     struct EnemySystemJob : IJobForEachWithEntity<Translation, Enemy>
     {

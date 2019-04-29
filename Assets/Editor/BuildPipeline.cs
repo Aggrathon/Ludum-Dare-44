@@ -43,13 +43,13 @@ public class BuildPipelineScript : EditorWindow
 		{
 			case BuildTarget.StandaloneOSX:
 				string folder = Path.Combine(path, "mac");
-				BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, Path.Combine(folder, name), platform, BuildOptions.None);
+				BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, Path.Combine(folder, name), platform, BuildOptions.CompressWithLz4HC);
 				Compress(folder, name + "_MAC", path);
 				break;
 			case BuildTarget.StandaloneWindows:
 			case BuildTarget.StandaloneWindows64:
 				folder = Path.Combine(path, "win");
-				BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, Path.Combine(folder, name + ".exe"), platform, BuildOptions.None);
+				BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, Path.Combine(folder, name + ".exe"), platform, BuildOptions.CompressWithLz4HC);
 				Compress(folder, name + "_WIN", path);
 				break;
 			case BuildTarget.WebGL:
@@ -59,13 +59,13 @@ public class BuildPipelineScript : EditorWindow
                 PlayerSettings.WebGL.linkerTarget = WebGLLinkerTarget.Wasm;
                 PlayerSettings.WebGL.threadsSupport = true;
                 PlayerSettings.WebGL.memorySize = 512;
-				BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, folder, platform, BuildOptions.None);
+				BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, folder, platform, BuildOptions.CompressWithLz4HC);
 				break;
 			case BuildTarget.StandaloneLinux:
 			case BuildTarget.StandaloneLinux64:
 			case BuildTarget.StandaloneLinuxUniversal:
 				folder = Path.Combine(path, "lin");
-				BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, Path.Combine(folder, name), platform, BuildOptions.None);
+				BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, Path.Combine(folder, name), platform, BuildOptions.CompressWithLz4HC);
 				Compress(folder, name + "_LIN", path);
 				break;
 		}
