@@ -2821,13 +2821,13 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 417353556}
-    characterCount: 17
+    characterCount: 0
     spriteCount: 0
-    spaceCount: 2
-    wordCount: 3
+    spaceCount: 0
+    wordCount: 0
     linkCount: 0
-    lineCount: 3
-    pageCount: 1
+    lineCount: 0
+    pageCount: 0
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
@@ -4118,13 +4118,13 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 573754619}
-    characterCount: 17
+    characterCount: 0
     spriteCount: 0
-    spaceCount: 2
-    wordCount: 3
+    spaceCount: 0
+    wordCount: 0
     linkCount: 0
-    lineCount: 2
-    pageCount: 1
+    lineCount: 0
+    pageCount: 0
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
@@ -10935,6 +10935,7 @@ GameObject:
   - component: {fileID: 966972355}
   - component: {fileID: 966972354}
   - component: {fileID: 966972353}
+  - component: {fileID: 966972357}
   m_Layer: 5
   m_Name: Restart
   m_TagString: Untagged
@@ -11020,7 +11021,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1440081077}
+      - m_Target: {fileID: 966972357}
         m_MethodName: Restart
         m_Mode: 1
         m_Arguments:
@@ -11070,6 +11071,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 966972351}
   m_CullTransparentMesh: 0
+--- !u!114 &966972357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 966972351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6c6940bda95f794dbdb035677993616, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &978631012
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15833,13 +15846,13 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 1708259333}
-    characterCount: 17
+    characterCount: 0
     spriteCount: 0
-    spaceCount: 2
-    wordCount: 3
+    spaceCount: 0
+    wordCount: 0
     linkCount: 0
-    lineCount: 3
-    pageCount: 1
+    lineCount: 0
+    pageCount: 0
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
@@ -18591,6 +18604,11 @@ PrefabInstance:
         type: 3}
       propertyPath: onWin.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4779141122109524584, guid: 1c09a7edb677cda4aaa26671be6635ac,
+        type: 3}
+      propertyPath: totalHealth
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 4980221811612878361, guid: 1c09a7edb677cda4aaa26671be6635ac,
         type: 3}

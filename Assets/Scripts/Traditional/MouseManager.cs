@@ -55,7 +55,7 @@ public class MouseManager : MonoBehaviour
         audio = FindObjectOfType<AudioManager>();
     }
 
-    void Update()
+    void LateUpdate()
     {
         // Gravity Well
         if (Input.GetMouseButton(0) && state.water > 0) {
