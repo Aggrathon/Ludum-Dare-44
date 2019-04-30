@@ -1,6 +1,7 @@
 # Green Goo - Ludum Dare 44
 ![Green Goo Logo](Presentation/cover.png)  
 Manipulate gravity to coordinate swarms of nano-robots in order to “greenify” a planet.  
+Fuel the expansion by spending your nano-robots to build mines on the asteroids.  
 ![Screenshot](Presentation/Screenshot.png)  
 My entry to the 44:th Ludum Dare game jam (compo rules).  
 
