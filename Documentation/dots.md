@@ -15,6 +15,8 @@ and boilerplate:y but (instead structs instead of delegates), but it provides so
 guarantees that avoids some problems, and can lead to optimisations. The upside
 is that these technologies can be used without the rest of the DOTS.
 
+![cpu_utilisation](cpu.png)
+
 ## The Negative
 
 The two other parts of DOTS that I used was the ECS (Entity-Component-System) and
@@ -62,8 +64,9 @@ all gravity to be handled by a simple lookup in the vector field rather than
 recalculated for each rigidbody. This approach is also used for the gravity wells
 (mothership and mouse) by temporarily adjusting the vector field.
 
+![vector_field](gravity.png)
+
 A bonus feature is that the vector field also helped me avoid implementing a navigation
 algorithm. The transport ships are steered by simply selecting the direction to move based
 on a minimisation of the euclidean distance and the magnitude of the vector field
 (i.e. avoiding regions with high gravity).
-
